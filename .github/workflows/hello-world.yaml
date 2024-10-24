@@ -1,10 +1,20 @@
 name: hello world
-on: 
+on:
   push:
-    branches: [ master ]
+    branches: [master]
 jobs:
   say_hello:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "TODAY=$(date +%y-%m-%d)"  >> $GITHUB_ENV
-      - run: echo "Hello World", today is $TODAY
+      # Set current date in environment variable
+      - name: Set today's date
+        run: echo "TODAY=$(date +%Y-%m-%d)" >> $GITHUB_ENV
+
+      # Output a hello message along with today's date
+      - name: Greet the world
+        run: echo "Hello World, today is ${{ env.TODAY }}"
+
+      # Additional step: Conditional success message
+      - name: Job success
+        if: success()
+        run: echo "The job ran successfully on ${{ env.TODAY }}!"
